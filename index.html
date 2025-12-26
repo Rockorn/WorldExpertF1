@@ -1,76 +1,579 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Регистрация аккаунта</title>
-<style>
-body {
-margin: 0;
-font-family: Inter, Arial, sans-serif;
-background: #0e0e11;
-color: #ffffff;
-display: flex;
-align-items: center;
-justify-content: center;
-min-height: 100vh;
-}
-.container {
-max-width: 720px;
-padding: 48px 32px;
-text-align: center;
-}
-h1 {
-font-size: 42px;
-margin-bottom: 16px;
-letter-spacing: -0.02em;
-}
-p {
-font-size: 18px;
-line-height: 1.5;
-color: #bdbdbd;
-margin-bottom: 40px;
-}
-a.button {
-display: inline-block;
-padding: 16px 32px;
-background: #ff6a00;
-color: #000000;
-font-size: 18px;
-font-weight: 600;
-text-decoration: none;
-border-radius: 8px;
-transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-a.button:hover {
-transform: translateY(-2px);
-box-shadow: 0 8px 24px rgba(255, 106, 0, 0.35);
-}
-footer {
-margin-top: 48px;
-font-size: 14px;
-color: #6f6f6f;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Worl Expert F1 — аналитика, разборы и консультации по Formula 1</title>
+  <meta name="description" content="Worl Expert F1: аналитика, разборы гонок, статистика, история и технологии F1. Подписка и консультации." />
+  <meta name="theme-color" content="#0b0f14" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Worl Expert F1" />
+  <meta property="og:description" content="Аналитика и разборы Formula 1: быстро, структурно, по делу." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ru_RU" />
+
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --bg2:#0f1621;
+      --card:#111a26;
+      --text:#e9eef6;
+      --muted:#a8b3c7;
+      --line:rgba(255,255,255,.10);
+      --accent:#ff2d2d; /* F1-ish red */
+      --accent2:#ff6b2d;
+      --ok:#28d17c;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius:18px;
+      --max:1100px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(900px 450px at 15% 10%, rgba(255,45,45,.16), transparent 65%),
+        radial-gradient(800px 420px at 90% 25%, rgba(255,107,45,.10), transparent 62%),
+        linear-gradient(180deg, var(--bg), #070a0f);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 18px}
+    .nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,15,20,.70);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      text-decoration:none;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 10px 26px rgba(255,45,45,.22);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:before{
+      content:"";
+      position:absolute; inset:-8px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.18) 0 18%, transparent 18% 32%, rgba(255,255,255,.10) 32% 38%, transparent 38% 100%);
+      transform:skewX(-12deg);
+      opacity:.9;
+    }
+    .nav-links{
+      display:flex; align-items:center; gap:14px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .nav-links a{
+      text-decoration:none;
+      color:var(--muted);
+      font-weight:600;
+      font-size:14px;
+      padding:8px 10px;
+      border-radius:10px;
+      transition:.15s ease;
+    }
+    .nav-links a:hover{
+      color:var(--text);
+      background: rgba(255,255,255,.06);
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding:11px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      text-decoration:none;
+      font-weight:700;
+      font-size:14px;
+      transition:.15s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,.09)}
+    .btn-primary{
+      border:1px solid rgba(255,45,45,.55);
+      background: linear-gradient(135deg, rgba(255,45,45,.92), rgba(255,107,45,.78));
+      box-shadow: 0 18px 46px rgba(255,45,45,.18);
+    }
+    .btn-primary:hover{filter:saturate(1.06)}
+    header.hero{
+      padding:56px 0 26px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .hero-card{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(17,26,38,.82), rgba(15,22,33,.62));
+      border-radius: var(--radius);
+      padding:26px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card:after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(620px 240px at 40% 0%, rgba(255,45,45,.18), transparent 60%);
+      pointer-events:none;
+    }
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+      letter-spacing:.3px;
+      text-transform:uppercase;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(255,45,45,.12);
+    }
+    h1{
+      margin:12px 0 10px;
+      font-size:42px;
+      line-height:1.08;
+      letter-spacing:-.7px;
+    }
+    .lead{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.55;
+      max-width:62ch;
+    }
+    .hero-actions{
+      display:flex; gap:12px; flex-wrap:wrap;
+      position:relative;
+      z-index:1;
+    }
+    .mini{
+      display:grid;
+      gap:12px;
+    }
+    .mini-card{
+      border:1px solid var(--line);
+      background: rgba(17,26,38,.55);
+      border-radius: var(--radius);
+      padding:16px;
+    }
+    .mini-title{font-weight:800; margin:0 0 4px; font-size:14px}
+    .mini-text{margin:0; color:var(--muted); font-size:13px; line-height:1.45}
+    section{
+      padding:28px 0;
+    }
+    .section-title{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    h2{
+      margin:0;
+      font-size:22px;
+      letter-spacing:-.3px;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+      max-width:72ch;
+    }
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--line);
+      background: rgba(17,26,38,.50);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:16px;
+      letter-spacing:-.2px;
+    }
+    .card p{margin:0; color:var(--muted); font-size:14px; line-height:1.55}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:800;
+      margin-bottom:10px;
+      width:fit-content;
+    }
+    .pricing{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      align-items:stretch;
+    }
+    .price{
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.6px;
+      margin:8px 0 8px;
+    }
+    .list{
+      margin:0; padding:0;
+      list-style:none;
+      display:grid;
+      gap:8px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+    }
+    .list li{display:flex; gap:10px}
+    .tick{
+      width:18px; height:18px; border-radius:6px;
+      display:inline-grid; place-items:center;
+      background: rgba(40,209,124,.14);
+      border:1px solid rgba(40,209,124,.30);
+      color: var(--ok);
+      flex: 0 0 auto;
+      margin-top:1px;
+    }
+    details{
+      border:1px solid var(--line);
+      background: rgba(17,26,38,.40);
+      border-radius: 14px;
+      padding:12px 14px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:800;
+      color:var(--text);
+      list-style:none;
+    }
+    details p{margin:8px 0 0; color:var(--muted); font-size:14px; line-height:1.55}
+    .cta{
+      border:1px solid rgba(255,45,45,.24);
+      background:
+        radial-gradient(640px 220px at 30% 10%, rgba(255,45,45,.20), transparent 60%),
+        rgba(17,26,38,.55);
+      border-radius: var(--radius);
+      padding:22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    .cta strong{font-size:18px}
+    footer{
+      padding:18px 0 36px;
+      color:var(--muted);
+      font-size:13px;
+      border-top:1px solid var(--line);
+    }
+    .footer-grid{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    }
+    .smalllinks{display:flex; gap:12px; flex-wrap:wrap}
+    .smalllinks a{color:var(--muted); text-decoration:none}
+    .smalllinks a:hover{color:var(--text)}
+    .note{color:var(--muted); font-size:12px; margin-top:8px}
+
+    @media (max-width: 920px){
+      .hero-grid{grid-template-columns: 1fr; }
+      h1{font-size:36px}
+      .grid-3{grid-template-columns:1fr}
+      .pricing{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<h1>Регистрация аккаунта</h1>
-<p>
-Для продолжения работы с нашим сервисом вам необходимо создать
-официальный аккаунт на платформе Alibaba.
-</p>
-<a
-class="button"
-href="https://login.alibaba.com/join.htm"
-target="_blank"
-rel="noopener noreferrer"
->
-Зарегистрироваться на Alibaba
-</a>
-<footer>
-© 2025. Все права защищены
-</footer>
-</div>
+
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" id="top">
+        <span class="logo" aria-hidden="true"></span>
+        <span>Worl Expert F1</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#about">О сервисе</a>
+        <a href="#offers">Что получаете</a>
+        <a href="#pricing">Тарифы</a>
+        <a href="#faq">FAQ</a>
+        <a class="btn btn-primary" href="#contact">Написать</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-card">
+        <div class="kicker"><span class="dot"></span> Экспертный сервис по Formula 1</div>
+        <h1>Разборы, аналитика и решения по F1 — без воды</h1>
+        <p class="lead">
+          Worl Expert F1 помогает быстро разобраться в гонке/сезоне: контекст, статистика, техника, стратегия — в структурном формате.
+          Подписка или точечные консультации под вашу задачу.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" id="ctaMain" href="#">Перейти в Telegram</a>
+          <a class="btn" href="#pricing">Посмотреть тарифы</a>
+          <a class="btn" href="#contact">Запросить консультацию</a>
+        </div>
+        <div class="note">Подсказка: этот текст — шаблон. Замени под реальное УТП и формат работы.</div>
+      </div>
+
+      <div class="mini">
+        <div class="mini-card">
+          <p class="mini-title">Форматы</p>
+          <p class="mini-text">Подписка, разовые разборы, консультации, подготовка к ставкам/фэнтези (если релевантно), обучение по теме.</p>
+        </div>
+        <div class="mini-card">
+          <p class="mini-title">Скорость</p>
+          <p class="mini-text">Структурные выводы и чек-листы: что произошло, почему, что будет дальше.</p>
+        </div>
+        <div class="mini-card">
+          <p class="mini-title">Фокус</p>
+          <p class="mini-text">Стратегии, темп, деградация, события, регламент, техника, история — без “шума”.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>О сервисе</h2>
+        <p class="sub">1–2 предложения: для кого и какой конкретно результат даёте (например: “для болельщиков, аналитиков, команд/медиа, беттинга, фэнтези”).</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="badge">Что делаем</div>
+          <h3>Разборы гонок и уик-эндов</h3>
+          <p>Ключевые решения, стратегия, инциденты, темп, деградация, “почему так вышло”.</p>
+        </div>
+        <div class="card">
+          <div class="badge">На чём строится</div>
+          <h3>Статистика и контекст</h3>
+          <p>Цифры, сравнения, исторические параллели, регламент и технические нюансы — в одном месте.</p>
+        </div>
+        <div class="card">
+          <div class="badge">Как выдаём</div>
+          <h3>Структура и действие</h3>
+          <p>Короткие выводы + “что смотреть дальше”: чек-листы и тезисы, которые легко применить.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="offers">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Что получаете</h2>
+        <p class="sub">Список преимуществ лучше привязать к боли аудитории: экономия времени, ясность, уверенность в выводах, системность.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>Еженедельная аналитика</h3>
+          <p>Коротко и по делу: итоги сессий, основные тренды, прогноз повестки на уик-энд.</p>
+        </div>
+        <div class="card">
+          <h3>Разбор под запрос</h3>
+          <p>Один вопрос → один отчёт: “почему пилот просел”, “почему стратегия не сработала”, “что изменилось после апдейтов”.</p>
+        </div>
+        <div class="card">
+          <h3>База знаний</h3>
+          <p>Ссылки/заметки по регламенту, истории, технологиям, статистике — чтобы быстро сверяться.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Тарифы</h2>
+        <p class="sub">Цены и наполнение — примеры. Замени на реальные, либо убери цены и оставь “по запросу”.</p>
+      </div>
+
+      <div class="pricing">
+        <div class="card">
+          <div class="badge">Старт</div>
+          <h3>Подписка</h3>
+          <div class="price">₽990 / мес</div>
+          <ul class="list">
+            <li><span class="tick">✓</span>Еженедельные разборы</li>
+            <li><span class="tick">✓</span>Короткие выводы по уик-энду</li>
+            <li><span class="tick">✓</span>Доступ к базе материалов</li>
+          </ul>
+          <div style="height:12px"></div>
+          <a class="btn btn-primary" id="buySub" href="#contact">Оформить</a>
+        </div>
+
+        <div class="card" style="border-color: rgba(255,45,45,.32);">
+          <div class="badge">Популярное</div>
+          <h3>Профи</h3>
+          <div class="price">₽2 990 / мес</div>
+          <ul class="list">
+            <li><span class="tick">✓</span>Всё из “Подписка”</li>
+            <li><span class="tick">✓</span>2 разовых разбора/мес</li>
+            <li><span class="tick">✓</span>Ответы на вопросы (чат/форма)</li>
+          </ul>
+          <div style="height:12px"></div>
+          <a class="btn btn-primary" id="buyPro" href="#contact">Подключить</a>
+        </div>
+
+        <div class="card">
+          <div class="badge">Разово</div>
+          <h3>Консультация</h3>
+          <div class="price">₽3 500</div>
+          <ul class="list">
+            <li><span class="tick">✓</span>60 минут созвона/чата</li>
+            <li><span class="tick">✓</span>Подготовка по вашему запросу</li>
+            <li><span class="tick">✓</span>Короткий итоговый конспект</li>
+          </ul>
+          <div style="height:12px"></div>
+          <a class="btn" id="bookCall" href="#contact">Записаться</a>
+        </div>
+      </div>
+
+      <div style="height:14px"></div>
+      <div class="cta">
+        <div>
+          <strong>Нужен разбор конкретной гонки/пилота/команды?</strong>
+          <div class="note">Опиши задачу в 3–5 предложениях — и будет понятен формат/срок/стоимость.</div>
+        </div>
+        <a class="btn btn-primary" href="#contact">Сформулировать запрос</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>FAQ</h2>
+        <p class="sub">Оставь самые частые возражения и вопросы: формат, сроки, что входит, кому подходит, возврат.</p>
+      </div>
+
+      <div style="display:grid; gap:10px;">
+        <details>
+          <summary>Для кого подходит Worl Expert F1?</summary>
+          <p>Для тех, кто хочет быстро понимать “что произошло и почему”: болельщики, контент-мейкеры, фэнтези, аналитики, медиа.</p>
+        </details>
+        <details>
+          <summary>Как быстро вы даёте разбор?</summary>
+          <p>Укажи реальный SLA: например “в обещанный день после гонки” или “в течение 24–48 часов”.</p>
+        </details>
+        <details>
+          <summary>Можно ли запросить разбор конкретной темы?</summary>
+          <p>Да: стратегия, темп, апдейты, регламент, история соперничества, сравнение сезонов и т.д.</p>
+        </details>
+        <details>
+          <summary>Как оплачивать?</summary>
+          <p>Укажи способы: перевод/карта/платёжная ссылка. Если нет — “по ссылке после согласования”.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Контакты</h2>
+        <p class="sub">Сделай один главный канал связи (Telegram) и один запасной (email).</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>Telegram</h3>
+          <p>Быстрее всего: напишите в Telegram, опишите задачу и формат (подписка/разбор/консультация).</p>
+          <div style="height:12px"></div>
+          <a class="btn btn-primary" id="tgLink" href="#">Открыть Telegram</a>
+        </div>
+
+        <div class="card">
+          <h3>Email</h3>
+          <p>Если удобнее письмом — отправьте запрос на почту.</p>
+          <div style="height:12px"></div>
+          <a class="btn" id="mailLink" href="#">Написать на почту</a>
+        </div>
+
+        <div class="card">
+          <h3>Форма (без бэкенда)</h3>
+          <p>Можно подключить Formspree/Google Forms. Сейчас — кнопка-шаблон.</p>
+          <div style="height:12px"></div>
+          <a class="btn" id="formLink" href="#">Подключить форму</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap footer-grid">
+      <div>
+        <div style="font-weight:800; color:var(--text)">Worl Expert F1</div>
+        <div class="note">© <span id="year"></span>. Аналитика и разборы Formula 1.</div>
+      </div>
+
+      <div class="smalllinks">
+        <a href="#about">О сервисе</a>
+        <a href="#pricing">Тарифы</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Контакты</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // === Configure here ===
+    const TG_URL = "https://t.me/your_username_or_channel"; // <-- replace
+    const EMAIL = "you@example.com";                         // <-- replace
+    const BRAND_URL = "https://t.me/your_username_or_channel"; // can be your site later
+
+    // Bind links
+    document.getElementById("ctaMain").href = TG_URL;
+    document.getElementById("tgLink").href = TG_URL;
+    document.getElementById("mailLink").href = `mailto:${EMAIL}?subject=${encodeURIComponent("Worl Expert F1 — запрос")}`;
+    document.getElementById("formLink").href = BRAND_URL;
+
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Optional: track CTA clicks (simple)
+    ["buySub","buyPro","bookCall"].forEach(id => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener("click", () => {
+        // placeholder for analytics
+      });
+    });
+  </script>
 </body>
 </html>
